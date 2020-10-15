@@ -1,0 +1,6 @@
+The jQuery file is being loaded into the project via Content Delivery Network.
+$ needs to be defined before it can be used in the index.js file.
+I think that refactoring your HTML, CSS, and JavaScript into different files is helpful for organization. 
+However, spliting your code into several files may make it harder to navigate, depending on how much code you have.
+I think that refactoring you code in JavaScript into separate functions is beneficial because it allows you to reuse code more easily.
+However, it make you code seem long and clutterred (but that's where comments come in).
