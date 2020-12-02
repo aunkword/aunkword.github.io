@@ -1,0 +1,76 @@
+// Setup
+///////////////////////////////////////////////
+
+var red = {};
+red.id = '#red';
+red.x = 180;
+red.y = 150;
+red.width = 50;
+red.height = 50;
+
+var blue = {};
+blue.id = '#blue';
+blue.x = 50;
+blue.y = 90;
+blue.width = 50;
+blue.height = 50;
+
+$(document).on('mousemove', handleMouseMove);
+
+// red right > blue left
+// red left < blue right
+// red top < blue bottom
+// red bottom > blue top
+
+// core logic
+///////////////////////////////////////////////
+
+function handleMouseMove(event) {
+    // get the mouse location from the event object
+    moveBlueSquare(event.pageX, event.pageY);  
+    
+    if (doCollide(red, blue)) {
+        showResult(true);
+    } else {
+        showResult(false);
+    }
+}
+
+// Helper Functions
+///////////////////////////////////////////////
+
+function moveBlueSquare(x, y) {
+    blue.x = x
+    blue.y = y
+    $(blue.id).css('left', blue.x);
+    $(blue.id).css('top', blue.y);
+}
+
+function doCollide(square1, square2) {
+    // TODO: calculate and store the remaining
+    // sides of the square1
+  
+    square1.leftX = square1.x;
+    square1.topY = square1.y;
+    square1.rightX = square1.x - red.width;
+    square1.bottomY = square1.y - red.height;
+    
+    // TODO: Do the same for square2
+  
+    square2.leftX = square2.x;
+    square2.topY = square2.y;
+    square2.rightX = square2.x - blue.width;
+    square2.bottomY = square2.y - blue.height;
+    
+    // TODO: Return true if they are overlapping, false otherwise
+	
+	if (red.rightX > blue.leftX || red.leftX < blue.rightX || red.topY < blue.bottomY || red.bottomY > blue.topY) {
+      return false
+    } else {
+      return true
+    }
+}
+
+function showResult(result) {
+    $("h2").text('doCollide: ' + result);
+}

@@ -1,0 +1,34 @@
+User Story / Gameplay:
+
+1. Pong is basically a game where there are 2 player, each with a sort of movable barrier that protects there side, and each player tries to score points on the other player. A ball is hit
+   back and forth between the "court" or playing area/field until one of the 2 players scores. Once one of the players scores, the ball is then sent back to the middle again so that the 2 players
+   can continue to play until more points are scored. The game continues until the designated number of points needed for either player to win is met. I believe this number is 8 in standard pong.
+   Once a player scores 8 points they win. The players may then play more rounds and the scores will reset for each game they finish. I also think there is some sort of time limit but I don't 
+   know if we'll be incorporating that aspect into the project.
+2. The conditions for the game when it begins are that there are 2 sort of walls or platforms on either side of the grid and a ball in the middle that starts to move. The walls can only move 
+   vertically and cannot pass onto the other player's side. 
+3. The game ends when the specificied amount of points needed to win the game is reached.
+4. If the ball passes the wall/platform of one platform, then the player owning the other wall scores a point
+   If a player scores a point, then the ball must disappear and reappear in the middle again and must be moving in a random direction
+   If the ball tries to pass the top or bottom borders, then the ball will be bounced back down or up respective to its location
+   If the score needed to win is reached, the game ends
+   If the time ends, the person with the higher score wins
+   If it is a tie by the time that the time ends, the next point scored wins the game
+
+Visual Game Components:
+
+1. The boarc, borders of the board, 2 walls, 1 ball
+    a. Static - The board and borders
+    b. Animated - Walls and ball
+    c. I'll probably only need to manage position and speed since there will be no number shown on the ball
+
+Events / Logic:
+
+1. Timer Events and probably Up Down W and S pressing/releasing events
+2. The timer event would serve as to tell when to end the game if the specific amount of points is not reached by that time. The keyboard key events (Up Down W S) would move/update the position
+   of the walls when pressed
+3. When time = 0, end game
+   When Up key is pressed speed and position of player 2 wall increases (+y) until released, when released returns to 0 and maintains position until moved again
+   When Down key is pressed speed and position of player 2 wall decreases (-y) until released, when released returns to 0 and maintains position until moved again
+   When W key is pressed speed and position of player 1 wall increases (+y) until released, when released returns to 0 and maintains position until moved again
+   When S key is pressed speed and position of player 1 wall decreases (-y) until released, when released returns to 0 and maintains position until moved again
