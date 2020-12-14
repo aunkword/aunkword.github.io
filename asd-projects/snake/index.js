@@ -24,8 +24,8 @@ function runProgram(){
   // Game Item Objects
   
   var apple = {
-    x: 0,
-    y: 0,
+    x: 40,
+    y: 40,
     width: 20,
     height: 20,
     id: '#apple'
@@ -41,33 +41,36 @@ function runProgram(){
     id: '#head'
   }
 
-  var snakeBody = [];
+  var snakeBody = [head];
 
   // one-time setup
   var interval = setInterval(newFrame, fpsInterval);   // execute newFrame every 0.0166 seconds (60 Frames per second)
-  $(document).on('keydown', keyDown);                           // change 'eventType' to the type of event you want to handle
+  $(document).on('keydown', keyDown);                  // change 'eventType' to the type of event you want to handle
+  moveApple();
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
   function newFrame() {
+    followHead();
     repoHead();
+    bodyCollide();
     appleCollide();
     boardCollide();
   }
 
   function keyDown(event) {
-        if (event.which === key.left) {
+    if (head.speedX === 0 && event.which === key.left) {
             head.speedX = -20;
             head.speedY = 0;
-    } else if (event.which === key.up) {
+    } else if (head.speedY === 0 && event.which === key.up) {
             head.speedX = 0;
             head.speedY = -20;
-    } else if (event.which === key.right) {
+    } else if (head.speedX === 0 && event.which === key.right) {
             head.speedX = 20;
             head.speedY = 0;
-    } else if (event.which === key.down) {
+    } else if (head.speedY === 0 && event.which === key.down) {
             head.speedX = 0;
             head.speedY = 20;
     }
@@ -78,10 +81,10 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 
   function repoHead() {
-    $("#head").css("left", head.x);
-    $("#head").css("top", head.y);
     head.x += head.speedX;
     head.y += head.speedY;
+    $("#head").css("left", head.x);
+    $("#head").css("top", head.y);
   }
 
   function moveApple(){
@@ -99,8 +102,8 @@ function runProgram(){
   function body(id) {
     var body = {};
     body.id = id
-    body.x = 100;
-    body.y = 100;
+    body.x = 1000;
+    body.y = 1000;
     body.width = $('.body').width();
     body.height = $('.body').width();
     return body;
@@ -108,9 +111,11 @@ function runProgram(){
 
   function addNewBody(){
     var newID = 'body' + snakeBody.length;
-    $('<div>').addClass('snake').attr('id', newID).appendTo('#board');
     var newBody = body('#' + newID);
-  }
+    snakeBody.push(newBody);
+    $('<div>').addClass('snake').attr('id', newID).appendTo('#board')
+                                .css('left', head.x).css('top', head.y);
+}
 
   function boardCollide() {
     head.left = head.x;
@@ -120,10 +125,6 @@ function runProgram(){
 
     if (head.left < 0 || head.right > bwidth || head.top < 0 || head.bottom > bheight){
         endGame();
-        var again = prompt('Play again?');
-        if (again === 'yes'){
-        runProgram();
-      }
     }
   }
 
@@ -140,9 +141,19 @@ function runProgram(){
 
     if (head.left < apple.right && head.right > apple.left && head.top < apple.bottom && head.bottom > apple.top){
         score++;
+        $('#score').text(score);
         moveApple();
+        addNewBody();
     }
   }
+
+  function bodyCollide() {
+    for (var i = 1; i < snakeBody.length; i++) {
+        if(doCollide(head, snakeBody[i]) === true) {
+            endGame();
+        }
+  }
+}
 
   function doCollide(obj1, obj2) {
     if (obj1.x === obj2.x && obj1.y === obj2.y) {
@@ -152,6 +163,15 @@ function runProgram(){
         return false;
     }
 }
+
+  function followHead(){
+    for (var i = snakeBody.length - 1; i > 0; i--) {
+        snakeBody[i].x = snakeBody[i-1].x;
+        snakeBody[i].y = snakeBody[i-1].y;
+        $(snakeBody[i].id).css("left", snakeBody[i].x);
+        $(snakeBody[i].id).css("top", snakeBody[i].y);
+    }
+  }
 
   function randomInteger(max) {
     var randomInt = Math.floor(Math.random() * max);
@@ -168,5 +188,3 @@ function runProgram(){
   }
   
 }
-
-// https://jsbin.com/fegigoderu/edit?js,output
